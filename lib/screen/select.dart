@@ -33,7 +33,7 @@ class _SelectState extends State<Select> {
               children: <Widget>[
                 TextField(
                   decoration: InputDecoration(
-                    hintText: 'Licence plate number',
+                    hintText: 'Enter licence plate number',
                   ),
                   onChanged: (text) {
                     number = text;
@@ -43,7 +43,7 @@ class _SelectState extends State<Select> {
                 Container(
                   width: double.infinity,
                   child: DropdownButton(
-                    hint: Text('Please choose a location'),
+                    hint: Text('Choose a location'),
                     value: _selectedLocation,
                     onChanged: (newValue) {
                       setState(() {
