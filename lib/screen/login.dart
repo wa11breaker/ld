@@ -1,7 +1,19 @@
 import 'package:LondonDollar/screen/select.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  logined() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('logined', true);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Select()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,12 +44,7 @@ class Login extends StatelessWidget {
               FlatButton(
                 color: Colors.green,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Select(),
-                    ),
-                  );
+                  logined();
                 },
                 child: Text(
                   'Login',

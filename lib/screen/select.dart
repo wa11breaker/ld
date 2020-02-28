@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:LondonDollar/screen/home.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Select extends StatefulWidget {
   @override
@@ -19,6 +20,12 @@ class _SelectState extends State<Select> {
     'Kollam'
   ]; // Option 2
   String _selectedLocation;
+  onWork() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('onwork', true);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomeScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +69,7 @@ class _SelectState extends State<Select> {
                 FlatButton(
                   color: Colors.green,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    );
+                    onWork();
                   },
                   child: Text(
                     'Next',

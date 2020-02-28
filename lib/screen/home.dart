@@ -1,9 +1,12 @@
+import 'package:LondonDollar/screen/select.dart';
+import 'package:LondonDollar/services/pref.dart';
 import 'package:LondonDollar/widget/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tuple/tuple.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -50,6 +53,28 @@ class _HomeScreenState extends State<HomeScreen> {
         _error = err.code;
       });
     }
+  }
+
+  geta() async {
+    List temp = await Sp().checkAllCardState();
+    setState(() {
+      a = temp[0];
+      b = temp[1];
+      c = temp[2];
+      d = temp[3];
+      aa = temp[4];
+      bb = temp[5];
+      cc = temp[6];
+      dd = temp[7];
+      next = temp[8];
+      index = temp[9];
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    geta();
   }
 
   @override
@@ -110,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _getLocation();
                 setState(() {
                   aa = true;
+                  Sp().savCard('aa');
                 });
               },
               child: Cards(
@@ -123,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   if (aa) {
                     bb = true;
+                    Sp().savCard('bb');
                   }
                 });
               },
@@ -142,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   if (bb) {
                     cc = true;
+                    Sp().savCard('cc');
                   }
                 });
               },
@@ -156,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   if (cc) {
                     dd = true;
+                    Sp().savCard('dd');
                     compleated = true;
                   }
                 });
@@ -174,7 +203,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
             color: compleated ? Colors.green : Colors.white,
             onPressed: () {
-              setState(() {});
+              if (dd) {
+                setState(() {
+                  Sp().workDone();
+                  
+                  Sp().resetAllCardState();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Select()));
+                });
+              }
             },
             child: Text(
               'Done',
@@ -231,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _getLocation();
                 setState(() {
                   a = true;
+                  Sp().savCard('a');
                 });
               },
               child: Cards(
@@ -244,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   if (a) {
                     b = true;
+                    Sp().savCard('b');
                   }
                 });
               },
@@ -263,6 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   if (b) {
                     c = true;
+                    Sp().savCard('c');
                   }
                 });
               },
@@ -278,6 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (c) {
                     d = true;
                     next = true;
+                    Sp().savCard('d');
                   }
                 });
               },
@@ -296,7 +337,11 @@ class _HomeScreenState extends State<HomeScreen> {
             color: next ? Colors.green : Colors.transparent,
             onPressed: () {
               setState(() {
-                index = 1;
+                if (d) {
+                  index = 1;
+                  Sp().savCard('next');
+                  Sp().savIndex('index',1);
+                }
               });
             },
             child: Text(
