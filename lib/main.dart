@@ -21,17 +21,27 @@ Future<void> main() async {
 
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: rout,
       routes: {
-        '/': (context) => Login(),
-        '/select': (context) => Select(),
-        '/menue': (context) => HomeScreen(),
+        '/': (context) => Animation(
+              navto: Login(),
+            ),
+        '/select': (context) => Animation(
+              navto: Select(),
+            ),
+        '/menue': (context) => Animation(
+              navto: HomeScreen(),
+            ),
       },
     ),
   );
 }
 
-/* class Main extends StatelessWidget {
+class Animation extends StatelessWidget {
+  final Widget navto;
+
+  const Animation({Key key, this.navto}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,24 +52,12 @@ Future<void> main() async {
         debugShowCheckedModeBanner: false,
         home: SplashScreen.navigate(
           name: 'assets/splash.flr',
-          next: (context) => Login(),
           startAnimation: 'Untitled',
           backgroundColor: Color(0xffffffff),
-          until: () => Future.delayed(Duration(seconds: 3)),
+          next: (context) => navto,
+          until: () => Future.delayed(
+            Duration(seconds: 3),
+          ),
         ));
-  }
-} */
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Location',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
-      home: HomeScreen(),
-    );
   }
 }

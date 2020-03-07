@@ -1,3 +1,4 @@
+import 'package:LondonDollar/congif/color.dart';
 import 'package:LondonDollar/screen/select.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:LondonDollar/widget/card.dart';
@@ -5,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tuple/tuple.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -30,14 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   LocationData _location;
   String _error;
-
-  _incrementCounter() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int counter = (prefs.getInt('counter') ?? 0) + 1;
-
-    await prefs.setInt('counter', counter);
-  }
-
   _getLocation() async {
     setState(() {
       _error = null;
@@ -80,9 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.only(left: 28, right: 28, bottom: 0, top: 58),
           child: IndexedStack(
             index: index,
             children: <Widget>[
@@ -99,127 +91,123 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      height: 5,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    Image.asset(
-                      'assets/truck.png',
-                      color: Colors.black,
-                      scale: 1.5,
-                    )
-                  ],
+        Flexible(
+          flex: 4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: GridView(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      aa = true;
+                      Sp().savCard('aa');
+                    });
+                  },
+                  child: Cards(
+                    check: aa,
+                    text: 'At site',
+                    color: AppColors.black,
+                  ),
                 ),
-              ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (aa) {
+                        bb = true;
+                        Sp().savCard('bb');
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: bb,
+                    text: 'At Gate',
+                    color: AppColors.black,
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (bb) {
+                        cc = true;
+                        Sp().savCard('cc');
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: cc,
+                    text: 'At Gate',
+                    color: AppColors.black,
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (cc) {
+                        dd = true;
+                        Sp().savCard('dd');
+                        compleated = true;
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: dd,
+                    text: 'At Gate',
+                    color: AppColors.black,
+                  ),
+                )
+              ],
             ),
-            Icon(
-              Icons.outlined_flag,
-              size: 30,
-            )
-          ],
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  aa = true;
-                  Sp().savCard('aa');
-                });
-              },
-              child: Cards(
-                check: aa,
-                text: 'At site',
-              ),
+        PhysicalShape(
+          color: AppColors.blue,
+          clipper: ShapeBorderClipper(
+            shape: BeveledRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
             ),
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (aa) {
-                    bb = true;
-                    Sp().savCard('bb');
-                  }
-                });
+          ),
+          child: Container(
+            width: double.infinity,
+            height: 50,
+            child: FlatButton(
+              // color: compleated ? Colors.green : Colors.white,
+              onPressed: () {
+                if (dd) {
+                  setState(() {
+                    Sp().workDone();
+
+                    Sp().resetAllCardState();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Select()));
+                  });
+                }
               },
-              child: Cards(
-                check: bb,
-                text: 'At Gate',
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (bb) {
-                    cc = true;
-                    Sp().savCard('cc');
-                  }
-                });
-              },
-              child: Cards(
-                check: cc,
-                text: 'At Gate',
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (cc) {
-                    dd = true;
-                    Sp().savCard('dd');
-                    compleated = true;
-                  }
-                });
-              },
-              child: Cards(
-                check: dd,
-                text: 'At Gate',
-              ),
-            )
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            color: compleated ? Colors.green : Colors.white,
-            onPressed: () {
-              if (dd) {
-                setState(() {
-                  Sp().workDone();
-                  
-                  Sp().resetAllCardState();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Select()));
-                });
-              }
-            },
-            child: Text(
-              'Done',
-              style: TextStyle(
-                color: compleated ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                letterSpacing: 1.3,
+              child: Text(
+                'Done',
+                style: TextStyle(
+                  color: Colors.white,
+                  // color: compleated ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  letterSpacing: 1.3,
+                ),
               ),
             ),
           ),
@@ -232,125 +220,122 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      height: 5,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    Image.asset(
-                      'assets/truck.png',
-                      color: Colors.black,
-                      scale: 1.5,
-                    )
-                  ],
+        Flexible(
+          flex: 4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: GridView(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      a = true;
+                      Sp().savCard('a');
+                    });
+                  },
+                  child: Cards(
+                    check: a,
+                    text: 'At Gate',
+                    color: AppColors.red,
+                  ),
                 ),
-              ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (a) {
+                        b = true;
+                        Sp().savCard('b');
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: b,
+                    text: 'At Gate',
+                    color: AppColors.brown,
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (b) {
+                        c = true;
+                        Sp().savCard('c');
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: c,
+                    text: 'At Gate',
+                    color: AppColors.black,
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    _getLocation();
+                    setState(() {
+                      if (c) {
+                        d = true;
+                        next = true;
+                        Sp().savCard('d');
+                      }
+                    });
+                  },
+                  child: Cards(
+                    check: d,
+                    text: 'At Gate',
+                    color: AppColors.lightBlue,
+                  ),
+                )
+              ],
             ),
-            Icon(
-              Icons.outlined_flag,
-              size: 30,
-            )
-          ],
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  a = true;
-                  Sp().savCard('a');
-                });
-              },
-              child: Cards(
-                check: a,
-                text: 'At Gate',
+        Flexible(
+          flex: 1,
+          child: PhysicalShape(
+            color: AppColors.blue,
+            clipper: ShapeBorderClipper(
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (a) {
-                    b = true;
-                    Sp().savCard('b');
-                  }
-                });
-              },
-              child: Cards(
-                check: b,
-                text: 'At Gate',
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (b) {
-                    c = true;
-                    Sp().savCard('c');
-                  }
-                });
-              },
-              child: Cards(
-                check: c,
-                text: 'At Gate',
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _getLocation();
-                setState(() {
-                  if (c) {
-                    d = true;
-                    next = true;
-                    Sp().savCard('d');
-                  }
-                });
-              },
-              child: Cards(
-                check: d,
-                text: 'At Gate',
-              ),
-            )
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            color: next ? Colors.green : Colors.transparent,
-            onPressed: () {
-              setState(() {
-                if (d) {
-                  index = 1;
-                  Sp().savCard('next');
-                  Sp().savIndex('index',1);
-                }
-              });
-            },
-            child: Text(
-              'NEXT',
-              style: TextStyle(
-                color: next ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                letterSpacing: 1.3,
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    if (d) {
+                      index = 1;
+                      Sp().savCard('next');
+                      Sp().savIndex('index', 1);
+                    }
+                  });
+                },
+                child: Text(
+                  'NEXT',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    letterSpacing: 1.3,
+                  ),
+                ),
               ),
             ),
           ),
