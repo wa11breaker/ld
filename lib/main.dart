@@ -45,19 +45,20 @@ class Animation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'London Dollar',
-        theme: ThemeData(
-          primarySwatch: Colors.amber,
+      title: 'London Dollar',
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen.navigate(
+        name: 'assets/splash.flr',
+        startAnimation: 'Untitled',
+        backgroundColor: Color(0xffffffff),
+        next: (context) => navto,
+        until: () => Future.delayed(
+          Duration(seconds: 3),
         ),
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen.navigate(
-          name: 'assets/splash.flr',
-          startAnimation: 'Untitled',
-          backgroundColor: Color(0xffffffff),
-          next: (context) => navto,
-          until: () => Future.delayed(
-            Duration(seconds: 3),
-          ),
-        ));
+      ),
+    );
   }
 }

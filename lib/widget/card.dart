@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Cards extends StatelessWidget {
-  final bool check;
+  final bool check;/// to show tick button or not 
   final String text;
   final Color color;
 
   const Cards({Key key, this.check, this.text, this.color}) : super(key: key);
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +13,7 @@ class Cards extends StatelessWidget {
       color: color,
       clipper: ShapeBorderClipper(
         shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       elevation: 3,
@@ -54,15 +51,14 @@ class Cards extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.topRight,
                       child: Container(
-                          margin: const EdgeInsets.all(8),
-                          padding: const EdgeInsets.all(1),
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(50),
-                            color: Colors.white,
-                           
-                          ),
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(1),
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.white.withAlpha(200),
+                        ),
                         child: Container(
                           // margin: const EdgeInsets.all(8),
                           width: 25,
@@ -83,18 +79,19 @@ class Cards extends StatelessWidget {
                   )
                 : SizedBox.shrink(),
             Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  margin: const EdgeInsets.all(8),
-                  child: Text(
-                   text,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        letterSpacing: 1,
-                        color: Colors.white),
-                  ),
-                ))
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      letterSpacing: 1,
+                      color: Colors.white),
+                ),
+              ),
+            )
           ],
         ),
       ),
