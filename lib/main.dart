@@ -1,6 +1,7 @@
 import 'package:LondonDollar/screen/home.dart';
 import 'package:LondonDollar/screen/login.dart';
 import 'package:LondonDollar/screen/select.dart';
+import 'package:LondonDollar/screen/test.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,19 @@ Future<void> main() async {
       initialRoute: rout,
       routes: {
         '/': (context) => Animation(
-              navto: Login(),
+              // navto: Login(),
+              navto: Test(),
+
             ),
         '/select': (context) => Animation(
-              navto: Select(),
+              // navto: Select(),
+              navto: Test(),
+
             ),
         '/menue': (context) => Animation(
-              navto: HomeScreen(),
+              // navto: HomeScreen(),
+              navto: Test(),
+
             ),
       },
     ),

@@ -4,7 +4,7 @@ import 'package:LondonDollar/services/pref.dart';
 import 'package:LondonDollar/widget/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:location/location.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,38 +18,46 @@ class _HomeScreenState extends State<HomeScreen> {
   bool portGateOut = false;
   bool compleated = false;
 
-  final Location location = new Location();
-
-  LocationData _location;
-  String _error;
-  _getLocation() async {
-    setState(() {
-      _error = null;
-    });
-    try {
-      var _locationResult = await location.getLocation();
-      setState(() {
-        _location = _locationResult;
-        print(_location ?? _error);
-      });
-    } on PlatformException catch (err) {
-      setState(() {
-        _error = err.code;
-      });
-    }
-  }
 
   done() {
     if (portGateOut) {
       Sp().workDone();
       Sp().resetAllCardState();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Select()));
+      _showDialog();
+      // Navigator.push(
+      // context, MaterialPageRoute(builder: (context) => Select()));
     }
   }
 
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Work Compleated"),
+          content: Center(
+            child: Container(
+              width: 50,
+              height: 50,
+              color: Colors.green,
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Select()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   geta() async {
-    List temp = await Sp().checkAllCardState();// get saved bool form pref.dart
+    List temp = await Sp().checkAllCardState(); // get saved bool form pref.dart
     setState(
       () {
         siteGateIn = temp[0];
@@ -115,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      _getLocation();
+                     
                       setState(() {
                         siteGateIn = true;
                         Sp().savCard('siteGateIn');
@@ -130,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      _getLocation();
+                    
                       setState(() {
                         if (siteGateIn) {
                           siteGateOut = true;
@@ -147,13 +155,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      _getLocation();
-                      setState(() {
-                        if (siteGateOut) {
-                          portGateIn = true;
-                          Sp().savCard('portGateIn');
-                        }
-                      });
+                    
+                      setState(
+                        () {
+                          if (siteGateOut) {
+                            portGateIn = true;
+                            Sp().savCard('portGateIn');
+                          }
+                        },
+                      );
                     },
                     child: Cards(
                       check: portGateIn,
@@ -164,14 +174,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      _getLocation();
-                      setState(() {
-                        if (portGateIn) {
-                          portGateOut = true;
+                     
+                      setState(
+                        () {
+                          if (portGateIn) {
+                            portGateOut = true;
 
-                          Sp().savCard('portGateOut');
-                        }
-                      });
+                            Sp().savCard('portGateOut');
+                          }
+                        },
+                      );
                     },
                     child: Cards(
                       check: portGateOut,
@@ -189,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppColors.blue,
               clipper: ShapeBorderClipper(
                 shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               child: Container(

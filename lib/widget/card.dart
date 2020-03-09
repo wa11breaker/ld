@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Cards extends StatelessWidget {
-  final bool check;/// to show tick button or not 
+  /// to show tick button or not
+  final bool check;
   final String text;
   final Color color;
 
@@ -46,38 +47,7 @@ class Cards extends StatelessWidget {
             ),
 
             /// check for tick mark
-            check
-                ? Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.all(1),
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.white.withAlpha(200),
-                        ),
-                        child: Container(
-                          // margin: const EdgeInsets.all(8),
-                          width: 25,
-                          height: 25,
-                          decoration: BoxDecoration(
-                            // color: Colors.green,
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(color: Colors.green, width: 3),
-                          ),
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : SizedBox.shrink(),
+            check ? greenCheck() : SizedBox.shrink(),
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -93,6 +63,39 @@ class Cards extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget greenCheck() {
+    return Positioned.fill(
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          margin: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(1),
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Colors.white.withAlpha(200),
+          ),
+          child: Container(
+            // margin: const EdgeInsets.all(8),
+            width: 25,
+            height: 25,
+            decoration: BoxDecoration(
+              // color: Colors.green,
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(color: Colors.green, width: 3),
+            ),
+            child: Icon(
+              Icons.check,
+              color: Colors.green,
+              size: 20,
+            ),
+          ),
         ),
       ),
     );
