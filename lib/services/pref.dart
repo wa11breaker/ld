@@ -11,6 +11,11 @@ class Sp {
     return prefs.getBool('onwork') ?? false;
   }
 
+  getDriverId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('driverid')??'';
+  }
+
   checkAllCardState() async {
     List<dynamic> savedBool = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();

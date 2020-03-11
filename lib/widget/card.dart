@@ -5,8 +5,10 @@ class Cards extends StatelessWidget {
   final bool check;
   final String text;
   final Color color;
+  final String secText;
 
-  const Cards({Key key, this.check, this.text, this.color}) : super(key: key);
+  const Cards({Key key, this.check, this.text, this.color, this.secText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,8 @@ class Cards extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Positioned(
-              top: -20,
-              right: 0,
+              bottom: 10,
+              right: -20,
               child: Container(
                 width: 70,
                 height: 70,
@@ -34,8 +36,8 @@ class Cards extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 10,
-              right: -20,
+              bottom: -10,
+              right: -5,
               child: Container(
                 width: 70,
                 height: 70,
@@ -49,17 +51,35 @@ class Cards extends StatelessWidget {
             /// check for tick mark
             check ? greenCheck() : SizedBox.shrink(),
             Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                child: Text(
-                  text,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      letterSpacing: 1,
-                      color: Colors.white),
-                ),
+              alignment: Alignment.topLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          letterSpacing: 1,
+                          color: Colors.white),
+                    ),
+                  ),
+                  secText != null
+                      ? Container(
+                          margin: const EdgeInsets.all(10),
+                          child: Text(
+                            'Weight:$secText',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: 1,
+                                color: Colors.white),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                ],
               ),
             )
           ],
@@ -71,7 +91,7 @@ class Cards extends StatelessWidget {
   Widget greenCheck() {
     return Positioned.fill(
       child: Align(
-        alignment: Alignment.topRight,
+        alignment: Alignment.bottomRight,
         child: Container(
           margin: const EdgeInsets.all(8),
           padding: const EdgeInsets.all(1),

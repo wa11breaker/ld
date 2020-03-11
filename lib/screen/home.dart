@@ -2,9 +2,9 @@ import 'package:LondonDollar/congif/color.dart';
 import 'package:LondonDollar/screen/select.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:LondonDollar/widget/card.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,28 +17,33 @@ class _HomeScreenState extends State<HomeScreen> {
   bool portGateIn = false;
   bool portGateOut = false;
   bool compleated = false;
-
+  String weightIn;
+  String weightOut;
+  String chellan;
+  final TextEditingController _weightInController = TextEditingController();
+  final TextEditingController _weightOutController = TextEditingController();
+  final TextEditingController _chellanNoController = TextEditingController();
 
   done() {
     if (portGateOut) {
       Sp().workDone();
       Sp().resetAllCardState();
-      _showDialog();
+      _success();
       // Navigator.push(
       // context, MaterialPageRoute(builder: (context) => Select()));
     }
   }
 
-  void _showDialog() {
+  void _success() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Work Compleated"),
-          content: Center(
-            child: Container(
-              width: 50,
-              height: 50,
+          content: Container(
+            child: Icon(
+              Icons.check,
+              size: 100,
               color: Colors.green,
             ),
           ),
@@ -64,6 +69,179 @@ class _HomeScreenState extends State<HomeScreen> {
         siteGateOut = temp[1];
         portGateIn = temp[2];
         portGateOut = temp[3];
+      },
+    );
+  }
+
+  siteGateInRequest() async {
+    try {
+      Response response = await Dio().post(
+        "http://192.168.1.41:80/londollars/api/driver/create.php",
+        data: {},
+      );
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  siteGateOutRequest() async {
+    try {
+      Response response = await Dio().post(
+        "http://192.168.1.41:80/londollars/api/driver/create.php",
+        data: {},
+      );
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  portGateInRequest() async {
+    try {
+      Response response = await Dio().post(
+        "http://192.168.1.41:80/londollars/api/driver/create.php",
+        data: {},
+      );
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  portGateInOut() async {
+    try {
+      Response response = await Dio().post(
+        "http://192.168.1.41:80/londollars/api/driver/create.php",
+        data: {},
+      );
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _weightout() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Weight out"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  child: TextField(
+                    controller: _weightOutController,
+                    decoration: const InputDecoration(
+                      labelText: '  weight out',
+                    ),
+                    onSubmitted: (value) {
+                      weightOut = value;
+                    },
+                  ),
+                ),
+                Container(
+                  child: TextField(
+                    controller: _chellanNoController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: '  chellan Number',
+                    ),
+                    onSubmitted: (value) {
+                      chellan = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Save"),
+              onPressed: () {
+                setState(() {
+                  weightOut = _weightOutController.text;
+                  chellan = _chellanNoController.text;
+                  siteGateOut = true;
+                });
+                Sp().savCard('siteGateOut');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _weightin() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Weight In"),
+          content: Container(
+            child: TextField(
+              controller: _weightInController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: '  weight in',
+              ),
+              onSubmitted: (value) {
+                setState(() {
+                  weightIn = value;
+                  print(weightIn);
+                });
+              },
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Save"),
+              onPressed: () {
+                setState(() {
+                  weightIn = _weightInController.text;
+                  portGateIn = true;
+                });
+                Sp().savCard('portGateIn');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _chellanNumber() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Weight out"),
+          content: Container(
+            child: TextField(
+              controller: _chellanNoController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: '  chellan Number',
+              ),
+              onSubmitted: (value) {
+                chellan = value;
+              },
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Save"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -101,8 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'London Dollar',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                'Trip ID : xx',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
             ),
           ),
@@ -123,7 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                     
                       setState(() {
                         siteGateIn = true;
                         Sp().savCard('siteGateIn');
@@ -138,43 +315,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                    
-                      setState(() {
-                        if (siteGateIn) {
-                          siteGateOut = true;
-                          Sp().savCard('siteGateOut');
-                        }
-                      });
+                      if (siteGateIn) {
+                        _weightout();
+                      }
                     },
                     child: Cards(
                       check: siteGateOut,
                       text: 'Site Gate Out',
+                      secText: weightOut,
                       color: AppColors.brown,
                     ),
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                    
-                      setState(
-                        () {
-                          if (siteGateOut) {
-                            portGateIn = true;
-                            Sp().savCard('portGateIn');
-                          }
-                        },
-                      );
+                      if (siteGateOut) {
+                        _weightin();
+                      }
                     },
                     child: Cards(
                       check: portGateIn,
                       text: 'Port Gate In',
+                      secText: weightIn,
                       color: AppColors.black,
                     ),
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                     
                       setState(
                         () {
                           if (portGateIn) {

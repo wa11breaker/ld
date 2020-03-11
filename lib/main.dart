@@ -25,47 +25,35 @@ Future<void> main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: rout,
       routes: {
-        '/': (context) => Animation(
-              // navto: Login(),
-              navto: Test(),
-
-            ),
-        '/select': (context) => Animation(
-              // navto: Select(),
-              navto: Test(),
-
-            ),
-        '/menue': (context) => Animation(
-              // navto: HomeScreen(),
-              navto: Test(),
-
-            ),
+        '/': (context) =>
+            // /avto: Login(),
+            // HomeScreen(),
+            // Test(),
+            Select(),
+        '/select': (context) =>
+            // navto: Select(),
+            Test(),
+        '/menue': (context) =>
+            // navto: HomeScreen(),
+            Test(),
       },
     ),
   );
 }
 
-class Animation extends StatelessWidget {
-  final Widget navto;
+// class Animation extends StatelessWidget {
+//   final Widget navto;
 
-  const Animation({Key key, this.navto}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'London Dollar',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen.navigate(
-        name: 'assets/splash.flr',
-        startAnimation: 'Untitled',
-        backgroundColor: Color(0xffffffff),
-        next: (context) => navto,
-        until: () => Future.delayed(
-          Duration(seconds: 3),
-        ),
-      ),
-    );
-  }
-}
+//   const Animation({Key key, this.navto}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'London Dollar',
+//       theme: ThemeData(
+//         primarySwatch: Colors.amber,
+//       ),
+//       debugShowCheckedModeBanner: false,
+//       home: navto,
+//     );
+//   }
+// }
