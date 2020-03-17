@@ -13,7 +13,12 @@ class Sp {
 
   getDriverId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('driverid')??'';
+    return prefs.getString('driverid') ?? '';
+  }
+
+  getTripId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('tripid') ?? '';
   }
 
   checkAllCardState() async {
@@ -34,10 +39,7 @@ class Sp {
 
   resetAllCardState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('siteGateIn', false);
-    prefs.setBool('siteGateOut', false);
-    prefs.setBool('portGateIn', false);
-    prefs.setBool('portGateOut', false);
+    prefs.clear();
   }
 
   savCard(name) async {

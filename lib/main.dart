@@ -1,9 +1,7 @@
-import 'package:LondonDollar/screen/home.dart';
+import 'package:LondonDollar/screen/home_n.dart';
 import 'package:LondonDollar/screen/login.dart';
 import 'package:LondonDollar/screen/select.dart';
-import 'package:LondonDollar/screen/test.dart';
 import 'package:LondonDollar/services/pref.dart';
-import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -26,34 +24,17 @@ Future<void> main() async {
       initialRoute: rout,
       routes: {
         '/': (context) =>
-            // /avto: Login(),
-            // HomeScreen(),
-            // Test(),
-            Select(),
+            
+            Login(),
         '/select': (context) =>
-            // navto: Select(),
-            Test(),
+            
+            Select(),
+           
         '/menue': (context) =>
-            // navto: HomeScreen(),
-            Test(),
+            
+            HomeScreenN(),
+         
       },
     ),
   );
 }
-
-// class Animation extends StatelessWidget {
-//   final Widget navto;
-
-//   const Animation({Key key, this.navto}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'London Dollar',
-//       theme: ThemeData(
-//         primarySwatch: Colors.amber,
-//       ),
-//       debugShowCheckedModeBanner: false,
-//       home: navto,
-//     );
-//   }
-// }

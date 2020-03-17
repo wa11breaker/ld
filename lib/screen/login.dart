@@ -11,7 +11,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _driverid;
+  String _driverId;
+  String _driverName;
+
   String _email;
   String _password;
 
@@ -25,45 +27,34 @@ class _LoginState extends State<Login> {
       borderRadius: BorderRadius.all(Radius.circular(7.0)),
     ),
   );
-  void _submitCommand() {
-    print("Email: $_email, password: $_password");
-    post();
-  }
-
   save() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setBool('logined', true);
-    prefs.setString('driverid', _driverid);
+    prefs.setBool('logined', true);
+    prefs.setString('driverid', _driverId);
+    prefs.setString('drivername', _driverName);
     Navigator.push(context, MaterialPageRoute(builder: (context) => Select()));
   }
 
-  getId() async {
-    try {
-      Response response = await Dio()
-          .get(api+'driver/read.php');
-     
-      setState(
-        () {
-          _driverid = response.data['id'];
-        },
-      );
-      save();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  post() async {
+  login() async {
+    print("Email: $_email, password: $_password");
     try {
       Response response = await Dio().post(
-        "http://192.168.18.3:80/londollars/api/driver/read.php",
+        api + 'driver/login.php',
         data: {
           "username": _email,
           "password": _password,
         },
       );
       if (response.statusCode == 200) {
-        getId();
+        var driverName = response.data['records'][0]['name'];
+        var driverId = response.data['records'][0]['id'];
+        setState(
+          () {
+            _driverId = driverId;
+            _driverName = driverName;
+          },
+        );
+        save();
       }
     } catch (e) {
       print(e.toString());
@@ -96,7 +87,7 @@ class _LoginState extends State<Login> {
                 child: TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
-                    labelText: '  Email',
+                    labelText: '  User name',
                   ),
                   onSubmitted: (value) {
                     _email = value;
@@ -132,7 +123,7 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.all(Radius.circular(7.0)),
                       ),
                       onPressed: () {
-                        _submitCommand();
+                        login();
                       },
                     ),
                   ],
