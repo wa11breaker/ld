@@ -14,16 +14,16 @@ class _LoginState extends State<Login> {
   String _driverId;
   String _driverName;
 
-  String _email;
-  String _password;
+  var _password;
+  var _username;
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _passController = new TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   static const ShapeDecoration _decoration = ShapeDecoration(
     shape: BeveledRectangleBorder(
-      side: BorderSide(color: Color(0xFF442B2D), width: 0.5),
+      side: BorderSide(color: Colors.grey, width: 0.5),
       borderRadius: BorderRadius.all(Radius.circular(7.0)),
     ),
   );
@@ -35,13 +35,15 @@ class _LoginState extends State<Login> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Select()));
   }
 
-  login() async {
-    print("Email: $_email, password: $_password");
+  login({String username, String password}) async {
+    this._username = username;
+    this._password = password;
+    print('username: $username password : $password');
     try {
       Response response = await Dio().post(
         api + 'driver/login.php',
         data: {
-          "username": _email,
+          "username": _username,
           "password": _password,
         },
       );
@@ -52,9 +54,9 @@ class _LoginState extends State<Login> {
           () {
             _driverId = driverId;
             _driverName = driverName;
+            save();
           },
         );
-        save();
       }
     } catch (e) {
       print(e.toString());
@@ -71,7 +73,10 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 80.0),
             Column(
               children: <Widget>[
-                // Image.asset('packages/shrine_images/diamond.png'),
+                Image.asset(
+                  'assets/logo.jpg',
+                  height: 100,
+                ),
                 const SizedBox(height: 16.0),
                 Text(
                   'LONDON DOLLAR',
@@ -79,35 +84,34 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-            const SizedBox(height: 120.0),
+            const SizedBox(height: 60.0),
             PrimaryColorOverride(
-              color: Colors.brown,
+              color: Colors.black,
               child: Container(
                 decoration: _decoration,
                 child: TextField(
-                  controller: _usernameController,
+                  controller: this._emailController,
                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.person),
                     labelText: '  User name',
                   ),
-                  onSubmitted: (value) {
-                    _email = value;
-                  },
                 ),
               ),
             ),
-            const SizedBox(height: 12.0),
+            const SizedBox(height: 16.0),
             PrimaryColorOverride(
-              color: Colors.brown,
+              color: Colors.black,
               child: Container(
                 decoration: _decoration,
                 child: TextField(
-                  controller: _passwordController,
+                  controller: this._passController,
+                  obscureText: true,
                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.lock),
                     labelText: '  Password',
                   ),
-                  onSubmitted: (value) {
-                    _password = value;
-                  },
                 ),
               ),
             ),
@@ -123,7 +127,10 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.all(Radius.circular(7.0)),
                       ),
                       onPressed: () {
-                        login();
+                        login(
+                          username: this._emailController.text,
+                          password: this._passController.text,
+                        );
                       },
                     ),
                   ],

@@ -3,6 +3,7 @@ import 'package:LondonDollar/screen/login.dart';
 import 'package:LondonDollar/screen/select.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,24 +18,19 @@ Future<void> main() async {
   } else if (logined && onwork) {
     rout = '/menue';
   }
-
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: rout,
-      routes: {
-        '/': (context) =>
-            
-            Login(),
-        '/select': (context) =>
-            
-            Select(),
-           
-        '/menue': (context) =>
-            
-            HomeScreenN(),
-         
-      },
-    ),
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(
+      MaterialApp(
+        title: 'LD',
+        debugShowCheckedModeBanner: false,
+        initialRoute: rout,
+        routes: {
+          '/': (context) => Login(),
+          '/select': (context) => Select(),
+          '/menue': (context) => HomeScreenN(),
+        },
+      ),
+    );
+  });
 }

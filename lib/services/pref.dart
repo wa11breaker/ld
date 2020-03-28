@@ -39,7 +39,12 @@ class Sp {
 
   resetAllCardState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    prefs.getKeys();
+    for (String key in prefs.getKeys()) {
+      if (key != "logined" && key != "driverid") {
+        prefs.remove(key);
+      }
+    }
   }
 
   savCard(name) async {
@@ -50,5 +55,10 @@ class Sp {
   workDone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('onwork', false);
+  }
+
+  saveString(name, val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(name, val);
   }
 }

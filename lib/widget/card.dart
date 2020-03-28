@@ -5,13 +5,30 @@ class Cards extends StatelessWidget {
   final bool check;
   final String text;
   final Color color;
-  final String secText;
+  final String sectext;
+  final String weight1;
+  final String weight2;
+  final String date;
+  final String time;
+  final String ticket;
 
-  const Cards({Key key, this.check, this.text, this.color, this.secText})
+  const Cards(
+      {Key key,
+      this.check,
+      this.text,
+      this.color,
+      this.weight1,
+      this.sectext,
+      this.weight2,
+      this.date,
+      this.time,
+      this.ticket})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    const textMargin = const EdgeInsets.symmetric(horizontal: 10, vertical: 2);
+    Color clr = Colors.white.withOpacity(.8);
     return PhysicalShape(
       color: color,
       clipper: ShapeBorderClipper(
@@ -25,7 +42,7 @@ class Cards extends StatelessWidget {
           children: <Widget>[
             Positioned(
               bottom: 10,
-              right: -20,
+              right: -35,
               child: Container(
                 width: 70,
                 height: 70,
@@ -36,8 +53,8 @@ class Cards extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: -10,
-              right: -5,
+              bottom: -35,
+              right: -10,
               child: Container(
                 width: 70,
                 height: 70,
@@ -62,20 +79,70 @@ class Cards extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
-                          letterSpacing: 1,
                           color: Colors.white),
                     ),
                   ),
-                  secText != null
+                  //*time
+                  time != null
                       ? Container(
-                          margin: const EdgeInsets.all(10),
+                          margin: textMargin,
                           child: Text(
-                            'Weight:$secText',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                letterSpacing: 1,
-                                color: Colors.white),
+                            'Time: $time',
+                            style: TextStyle(fontSize: 13, color: clr),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+
+                  //*date
+                  date != null
+                      ? Container(
+                          margin: textMargin,
+                          child: Text(
+                            'Date: $date',
+                            style: TextStyle(fontSize: 13, color: clr),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+
+                  //* seciondary text
+
+                  sectext != null
+                      ? Container(
+                          margin: textMargin,
+                          child: Text(
+                            'Challan: $sectext',
+                            style: TextStyle(fontSize: 13, color: clr),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+
+                  //* weight 1
+                  weight1 != null
+                      ? Container(
+                          margin: textMargin,
+                          child: Text(
+                            'Loaded wt: $weight1',
+                            style: TextStyle(fontSize: 13, color: clr),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  //* unloaded 2
+                  weight2 != null
+                      ? Container(
+                          margin: textMargin,
+                          child: Text(
+                            'Empty wt: $weight2',
+                            style: TextStyle(fontSize: 13, color: clr),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  //ticket number
+                  ticket != null
+                      ? Container(
+                          margin: textMargin,
+                          child: Text(
+                            'Ticket No: $ticket',
+                            style: TextStyle(fontSize: 13, color: clr),
                           ),
                         )
                       : SizedBox.shrink(),
