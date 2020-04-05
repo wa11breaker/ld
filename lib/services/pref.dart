@@ -11,9 +11,9 @@ class Sp {
     return prefs.getBool('onwork') ?? false;
   }
 
-  getDriverId() async {
+  getVehiclerId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('driverid') ?? '';
+    return prefs.getString('vehicleId') ?? '';
   }
 
   getTripId() async {
@@ -24,10 +24,10 @@ class Sp {
   checkAllCardState() async {
     List<dynamic> savedBool = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool siteGateIn = await prefs.getBool('siteGateIn') ?? false;
-    bool siteGateOut = await prefs.getBool('siteGateOut') ?? false;
-    bool portGateIn = await prefs.getBool('portGateIn') ?? false;
-    bool portGateOut = await prefs.getBool('portGateOut') ?? false;
+    bool siteGateIn =  prefs.getBool('siteGateIn') ?? false;
+    bool siteGateOut =  prefs.getBool('siteGateOut') ?? false;
+    bool portGateIn =  prefs.getBool('portGateIn') ?? false;
+    bool portGateOut =  prefs.getBool('portGateOut') ?? false;
 
     savedBool.add(siteGateIn);
     savedBool.add(siteGateOut);
@@ -41,7 +41,7 @@ class Sp {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.getKeys();
     for (String key in prefs.getKeys()) {
-      if (key != "logined" && key != "driverid") {
+      if (key != "logined" && key != "vehicleId") {
         prefs.remove(key);
       }
     }

@@ -5,6 +5,7 @@ import 'package:LondonDollar/screen/select.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:LondonDollar/widget/card.dart';
 import 'package:dio/dio.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -52,21 +53,21 @@ class _HomeScreenNState extends State<HomeScreenN> {
 
   getAllWeight() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    sInTime = await prefs.getString('sInTime') ?? '';
-    sOutTime = await prefs.getString('sOutTime') ?? '';
-    pInTime = await prefs.getString('pInTime') ?? '';
-    pOutTime = await prefs.getString('pOutTime') ?? '';
+    sInTime = prefs.getString('sInTime') ?? '';
+    sOutTime = prefs.getString('sOutTime') ?? '';
+    pInTime = prefs.getString('pInTime') ?? '';
+    pOutTime = prefs.getString('pOutTime') ?? '';
 
-    sInDate = await prefs.getString('sInDate') ?? '';
-    sOutDate = await prefs.getString('sOutDate') ?? '';
-    pInDate = await prefs.getString('pInDate') ?? '';
-    pOutDate = await prefs.getString('pOutDate') ?? '';
+    sInDate = prefs.getString('sInDate') ?? '';
+    sOutDate = prefs.getString('sOutDate') ?? '';
+    pInDate = prefs.getString('pInDate') ?? '';
+    pOutDate = prefs.getString('pOutDate') ?? '';
 
-    challan = await prefs.getString('challan') ?? '';
-    siteWeightOut = await prefs.getString('siteWeightOut') ?? '';
-    beforeunloadweight = await prefs.getString('beforeunloadweight') ?? '';
-    unloadweight = await prefs.getString('unloadweight') ?? '';
-    ticketNo = await prefs.getString('ticketno') ?? '';
+    challan = prefs.getString('challan') ?? '';
+    siteWeightOut = prefs.getString('siteWeightOut') ?? '';
+    beforeunloadweight = prefs.getString('beforeunloadweight') ?? '';
+    unloadweight = prefs.getString('unloadweight') ?? '';
+    ticketNo = prefs.getString('ticketno') ?? '';
   }
 
   updateTD(tname, time, dname, date) {
@@ -90,39 +91,34 @@ class _HomeScreenNState extends State<HomeScreenN> {
 
   done() {
     if (portGateOut) {
-      Sp().workDone();
-      Sp().resetAllCardState();
-      _success();
-      // Navigator.push(
-      // context, MaterialPageRoute(builder: (context) => Select()));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Work Completed"),
+            content: Container(
+              height: 150,
+              child: FlareActor(
+                'assets/check_do_sucesso.flr',
+                animation: "Untitled",
+                fit: BoxFit.contain,
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Sp().workDone();
+                  Sp().resetAllCardState();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Select()));
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
-  }
-
-  void _success() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Work Completed"),
-          content: Container(
-            child: Icon(
-              Icons.check,
-              size: 100,
-              color: Colors.green,
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Select()));
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   geta() async {
@@ -559,7 +555,6 @@ class _HomeScreenNState extends State<HomeScreenN> {
                   context, MaterialPageRoute(builder: (context) => Fuel())),
               child: Row(
                 children: <Widget>[
-                  
                   Icon(
                     Icons.local_gas_station,
                     size: 35,

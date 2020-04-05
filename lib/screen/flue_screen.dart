@@ -82,34 +82,50 @@ class _FlueState extends State<Fuel> {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
-          child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        children: [
-          Column(
+          child: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(28, 8, 28, 8),
+          height: MediaQuery.of(context).size.height -
+              2 * AppBar().preferredSize.height,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 20),
-
+              // SizedBox(height: 20),
               Container(
-                // width: double.infinity,
-                child: DropdownButton(
-                  isExpanded: true,
-                  hint: Text('Select Fuel Type'),
-                  value: selectedFuile,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedFuile = newValue;
-                    });
-                  },
-                  items: fule.map((materail) {
-                    return DropdownMenuItem(
-                      child: Text(materail),
-                      value: materail,
-                    );
-                  }).toList(),
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: _decoration,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.local_gas_station,color: Colors.black54,),
+                    ),
+                    DropdownButton(
+                     // isExpanded: true,
+                     underline: Container(
+                     
+                     ),
+                      hint: Text('  Select Fuel Type'),
+                      value: selectedFuile,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedFuile = newValue;
+                        });
+                      },
+                      items: fule.map((materail) {
+                        return DropdownMenuItem(
+                          child: Text(materail),
+                          value: materail,
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 20),
+
+              SizedBox(height: 40),
               Container(
                 decoration: _decoration,
                 child: TextField(
@@ -121,7 +137,7 @@ class _FlueState extends State<Fuel> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               Container(
                 decoration: _decoration,
                 child: TextField(
@@ -133,7 +149,7 @@ class _FlueState extends State<Fuel> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               Container(
                 decoration: _decoration,
                 child: TextField(
@@ -152,7 +168,7 @@ class _FlueState extends State<Fuel> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               PhysicalShape(
                 color: AppColors.black,
                 clipper: ShapeBorderClipper(
@@ -185,7 +201,7 @@ class _FlueState extends State<Fuel> {
               )
             ],
           ),
-        ],
+        ),
       )),
     );
   }

@@ -11,14 +11,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _driverId;
-  String _driverName;
+  String _password;
+  String _vehicleNumber;
 
-  var _password;
-  var _username;
-
-  final TextEditingController _emailController = new TextEditingController();
-  final TextEditingController _passController = new TextEditingController();
+  final TextEditingController _vehicleNumberController =
+      TextEditingController();
+  final TextEditingController _passController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   static const ShapeDecoration _decoration = ShapeDecoration(
@@ -27,36 +25,29 @@ class _LoginState extends State<Login> {
       borderRadius: BorderRadius.all(Radius.circular(7.0)),
     ),
   );
-  save() async {
+
+  save({String id}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('logined', true);
-    prefs.setString('driverid', _driverId);
-    prefs.setString('drivername', _driverName);
+    prefs.setString('vehicleId', id);
     Navigator.push(context, MaterialPageRoute(builder: (context) => Select()));
   }
 
   login({String username, String password}) async {
-    this._username = username;
+    this._vehicleNumber = username;
     this._password = password;
     print('username: $username password : $password');
     try {
       Response response = await Dio().post(
-        api + 'driver/login.php',
+        api + 'vehicle/login.php',
         data: {
-          "username": _username,
+          "regno": _vehicleNumber,
           "password": _password,
         },
       );
       if (response.statusCode == 200) {
-        var driverName = response.data['records'][0]['name'];
-        var driverId = response.data['records'][0]['id'];
-        setState(
-          () {
-            _driverId = driverId;
-            _driverName = driverName;
-            save();
-          },
-        );
+        String vehicleId = response.data['records'][0]['id'].toString();
+        save(id: vehicleId);
       }
     } catch (e) {
       print(e.toString());
@@ -67,77 +58,86 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          children: <Widget>[
-            const SizedBox(height: 80.0),
-            Column(
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top,
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'assets/logo.jpg',
-                  height: 100,
+                Column(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/logo.jpg',
+                      height: 100,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      'LONDON DOLLAR',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 60.0),
+                PrimaryColorOverride(
+                  color: Colors.black,
+                  child: Container(
+                    decoration: _decoration,
+                    child: TextField(
+                      controller: this._vehicleNumberController,
+                      textInputAction: TextInputAction.done,
+                      textCapitalization: TextCapitalization.characters,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.local_shipping),
+                        labelText: '  Vehicle Number',
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16.0),
-                Text(
-                  'LONDON DOLLAR',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ],
-            ),
-            const SizedBox(height: 60.0),
-            PrimaryColorOverride(
-              color: Colors.black,
-              child: Container(
-                decoration: _decoration,
-                child: TextField(
-                  controller: this._emailController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.person),
-                    labelText: '  User name',
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            PrimaryColorOverride(
-              color: Colors.black,
-              child: Container(
-                decoration: _decoration,
-                child: TextField(
-                  controller: this._passController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.lock),
-                    labelText: '  Password',
-                  ),
-                ),
-              ),
-            ),
-            Wrap(
-              children: <Widget>[
-                ButtonBar(
-                  children: <Widget>[
-                    RaisedButton(
-                      color: AppColors.black,
-                      child: const Text('NEXT'),
-                      elevation: 8.0,
-                      shape: const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                PrimaryColorOverride(
+                  color: Colors.black,
+                  child: Container(
+                    decoration: _decoration,
+                    child: TextField(
+                      controller: this._passController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.lock),
+                        labelText: '  Password',
                       ),
-                      onPressed: () {
-                        login(
-                          username: this._emailController.text,
-                          password: this._passController.text,
-                        );
-                      },
+                    ),
+                  ),
+                ),
+                Wrap(
+                  children: <Widget>[
+                    ButtonBar(
+                      children: <Widget>[
+                        RaisedButton(
+                          color: AppColors.black,
+                          child: const Text('NEXT'),
+                          elevation: 8.0,
+                          shape: const BeveledRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(7.0)),
+                          ),
+                          onPressed: () {
+                            login(
+                              username: this._vehicleNumberController.text,
+                              password: this._passController.text,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

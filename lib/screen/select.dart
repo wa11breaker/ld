@@ -13,46 +13,19 @@ class Select extends StatefulWidget {
 }
 
 class _SelectState extends State<Select> {
-  String driverid;
-  List<String> _number = [];
   List<String> _locations = [];
   List<String> _material = [];
-  List<String> _numberIndex = [];
+
   List<String> _locationsIndex = [];
   List<String> _materialIndex = [];
   //
   int _selectedLocationNo;
-  int _selectedNumberNo;
   int _selectedMaterialNo;
   //
   String _selectedLocation;
-  String _selectedNumber;
   String _selectedMAterial;
   String tripID;
-
-  getNumber() async {
-    try {
-      List<String> tempNumber = [];
-      List<String> tempNumberindex = [];
-      //Todo: api endpoint number plate end point
-      Response response = await Dio().get(api + 'vehicle/readall.php');
-
-      var json = response.data['records'];
-      int listLenght = json.length;
-      for (int i = 0; i < listLenght; i++) {
-        // numb.add(Vehicle.fromJson(json));
-        // print(numb);
-        tempNumber.add(json[i]['regno']);
-        tempNumberindex.add(json[i]['id']);
-      }
-      setState(() {
-        _number = tempNumber;
-        _numberIndex = tempNumberindex;
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  String vehicleId;
 
   getPlace() async {
     try {
@@ -108,10 +81,9 @@ class _SelectState extends State<Select> {
       Response response = await Dio().post(
         api + "/trip/createtrip.php",
         data: {
-          "driverid": driverid,
-          "vehicleid": _numberIndex[_selectedNumberNo],
           "projectid": _locationsIndex[_selectedLocationNo],
-          "materialid": _materialIndex[_selectedMaterialNo]
+          "materialid": _materialIndex[_selectedMaterialNo],
+          "vehicleid": vehicleId,
         },
       );
       if (response.statusCode == 201) {
@@ -134,18 +106,17 @@ class _SelectState extends State<Select> {
         context, MaterialPageRoute(builder: (context) => HomeScreenN()));
   }
 
-  getDriverId() async {
-    driverid = await Sp().getDriverId();
+  getVehiclerId() async {
+    vehicleId = await Sp().getVehiclerId();
   }
 
   @override
   void initState() {
-    super.initState();
-
-    getDriverId(); //form pref
+    getVehiclerId();
     getMaterial();
-    getNumber(); //from api
     getPlace();
+
+    super.initState();
   }
 
   @override
@@ -154,100 +125,79 @@ class _SelectState extends State<Select> {
       onWillPop: () async => false,
       child: Scaffold(
         body: SafeArea(
-          child: Container(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 8, 28, 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(),
-                  Text('Start a new trip',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    // width: double.infinity,
-                    child: DropdownButton(
-                      isExpanded: true,
-                      hint: Text('Select Material'),
-                      value: _selectedMAterial,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedMAterial = newValue;
-                          _selectedMaterialNo = _material.indexOf(newValue);
-                        });
-                      },
-                      items: _material.map((materail) {
-                        return DropdownMenuItem(
-                          child: Text(materail),
-                          value: materail,
-                        );
-                      }).toList(),
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height -
+                  2 * AppBar().preferredSize.height,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(28, 8, 28, 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Start a new trip',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24)),
+                    SizedBox(
+                      height: 40,
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  Container(
-                    // width: double.infinity,
-                    child: DropdownButton(
-                      isExpanded: true,
-                      hint: Text('Select Vehicle'),
-                      value: _selectedNumber,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedNumber = newValue;
-                          _selectedNumberNo = _number.indexOf(newValue);
-                        });
-                      },
-                      items: _number.map((number) {
-                        return DropdownMenuItem(
-                          child: Text(number),
-                          value: number,
-                        );
-                      }).toList(),
+                    Container(
+                      // width: double.infinity,
+                      child: DropdownButton(
+                        isExpanded: true,
+                        hint: Text('Select Material'),
+                        value: _selectedMAterial,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedMAterial = newValue;
+                            _selectedMaterialNo = _material.indexOf(newValue);
+                          });
+                        },
+                        items: _material.map((materail) {
+                          return DropdownMenuItem(
+                            child: Text(materail),
+                            value: materail,
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    // width: double.infinity,
-                    child: DropdownButton(
-                      isExpanded: true,
-                      hint: Text('Select Site'),
-                      value: _selectedLocation,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedLocation = newValue;
-                          _selectedLocationNo = _locations.indexOf(newValue);
-                        });
-                      },
-                      items: _locations.map((location) {
-                        return DropdownMenuItem(
-                          child: Text(location),
-                          value: location,
-                        );
-                      }).toList(),
+                    SizedBox(height: 30),
+                    Container(
+                      // width: double.infinity,
+                      child: DropdownButton(
+                        isExpanded: true,
+                        hint: Text('Select Site'),
+                        value: _selectedLocation,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedLocation = newValue;
+                            _selectedLocationNo = _locations.indexOf(newValue);
+                          });
+                        },
+                        items: _locations.map((location) {
+                          return DropdownMenuItem(
+                            child: Text(location),
+                            value: location,
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 40),
-                  RaisedButton(
-                    color: AppColors.black,
-                    child: Text(
-                      'NEXT',
-                      style: TextStyle(color: Colors.white.withOpacity(.95)),
+                    SizedBox(
+                      height: 40,
                     ),
-                    elevation: 8.0,
-                    shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                    RaisedButton(
+                      color: AppColors.black,
+                      child: Text(
+                        'NEXT',
+                        style: TextStyle(color: Colors.white.withOpacity(.95)),
+                      ),
+                      elevation: 8.0,
+                      shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                      ),
+                      onPressed: createTask,
                     ),
-                    onPressed: () {
-                      createTask();
-                      // onWork();
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
