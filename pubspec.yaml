@@ -28,6 +28,9 @@ dependencies:
   dio: ^3.0.9
   intl:
   flare_flutter:
+  image_picker: ^0.6.4
+  http:
+  geolocator: ^5.3.1
 
 
 dev_dependencies:

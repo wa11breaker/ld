@@ -1,12 +1,15 @@
 import 'package:LondonDollar/screen/home_n.dart';
 import 'package:LondonDollar/screen/login.dart';
 import 'package:LondonDollar/screen/select.dart';
+import 'package:LondonDollar/services/location.dart';
 import 'package:LondonDollar/services/pref.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<void> main() async {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  startLocation();
   String rout = '/';
   bool logined = await Sp().checkLogin();
   bool onwork = await Sp().checkOnWork();
@@ -27,7 +30,7 @@ Future<void> main() async {
         initialRoute: rout,
         routes: {
           '/': (context) => Login(),
-          '/select': (context) => Select(),
+          '/select': (context) => SelectBottomBar(),
           '/menue': (context) => HomeScreenN(),
         },
       ),

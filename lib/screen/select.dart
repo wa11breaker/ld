@@ -1,11 +1,14 @@
 import 'package:LondonDollar/congif/color.dart';
 import 'package:LondonDollar/congif/constants.dart';
+import 'package:LondonDollar/screen/flue_screen.dart';
 import 'package:LondonDollar/screen/home_n.dart';
 import 'package:LondonDollar/services/pref.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class Select extends StatefulWidget {
   @override
@@ -203,6 +206,44 @@ class _SelectState extends State<Select> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SelectBottomBar extends StatefulWidget {
+  @override
+  _SelectBottomBarState createState() => _SelectBottomBarState();
+}
+
+class _SelectBottomBarState extends State<SelectBottomBar> {
+  List<Widget> nav = [Select(), Fuel()];
+  int _currentIndex = 0;
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        selectedIconTheme: IconThemeData(color: AppColors.black),
+        selectedItemColor: AppColors.black,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Trip'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_gas_station),
+            title: Text('Fuel'),
+          ),
+        ],
+      ),
+      body: nav[_currentIndex],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:LondonDollar/congif/color.dart';
 import 'package:LondonDollar/congif/constants.dart';
 import 'package:LondonDollar/screen/select.dart';
+import 'package:LondonDollar/services/location.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,10 +31,12 @@ class _LoginState extends State<Login> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('logined', true);
     prefs.setString('vehicleId', id);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Select()));
+    startLocation();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SelectBottomBar()));
   }
 
-  login({String username, String password}) async {
+  login({String username, String password, BuildContext context}) async {
     this._vehicleNumber = username;
     this._password = password;
     print('username: $username password : $password');
@@ -69,7 +72,7 @@ class _LoginState extends State<Login> {
                 Column(
                   children: <Widget>[
                     Image.asset(
-                      'assets/logo.jpg',
+                      'assets/logo.png',
                       height: 100,
                     ),
                     const SizedBox(height: 16.0),
@@ -128,6 +131,7 @@ class _LoginState extends State<Login> {
                             login(
                               username: this._vehicleNumberController.text,
                               password: this._passController.text,
+                              context: context,
                             );
                           },
                         ),

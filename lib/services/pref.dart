@@ -13,7 +13,7 @@ class Sp {
 
   getVehiclerId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('vehicleId') ?? '';
+    return prefs.getString('vehicleId')??'';
   }
 
   getTripId() async {
